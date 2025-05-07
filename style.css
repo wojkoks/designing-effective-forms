@@ -1,3 +1,8 @@
 .modal {
     background: #c6d0ff7a;
 }
+.vat {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}

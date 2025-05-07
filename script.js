@@ -52,13 +52,12 @@ function getCountryCode(countryName) {
     })
     .then(data => {        
         const countryCode = data[0].idd.root + data[0].idd.suffixes.join("")
-        countryCode
         option = document.createElement('option');
         option.value = countryCode;
         option.text = `${countryCode} (${countryName})`;
+        countryCodeSelect.value = countryCode;
 
         countryCodeSelect.appendChild(option);
-        console.dir();
     })
     .catch(error => {
         console.error('Wystąpił błąd:', error);
