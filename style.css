@@ -6,3 +6,6 @@
     flex-direction: row;
     gap: 16px;
 }
+.vat .form-check {
+    align-self: center;
+}
