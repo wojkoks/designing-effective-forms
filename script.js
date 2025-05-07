@@ -1,9 +1,11 @@
 let clickCount = 0;
 
 const countryInput = document.getElementById('country');
+const countryDatalist = document.getElementById('country-options');
 const myForm = document.getElementById('form');
 const modal = document.getElementById('form-feedback-modal');
 const clicksInfo = document.getElementById('click-count');
+const countryCodeSelect = document.getElementById('countryCode');
 
 function handleClick() {
     clickCount++;
@@ -18,7 +20,7 @@ async function fetchAndFillCountries() {
         }
         const data = await response.json();
         const countries = data.map(country => country.name.common);
-        countryInput.innerHTML = countries.map(country => `<option value="${country}">${country}</option>`).join('');
+        countryDatalist.innerHTML = countries.map(country => `<option value="${country}">${country}</option>`).join('');
     } catch (error) {
         console.error('Wystąpił błąd:', error);
     }
@@ -29,6 +31,8 @@ function getCountryByIP() {
         .then(response => response.json())
         .then(data => {
             const country = data.country;
+            countryInput.value = country;
+            getCountryCode(country);
             // TODO inject country to form and call getCountryCode(country) function
         })
         .catch(error => {
@@ -48,7 +52,13 @@ function getCountryCode(countryName) {
     })
     .then(data => {        
         const countryCode = data[0].idd.root + data[0].idd.suffixes.join("")
-        // TODO inject countryCode to form
+        countryCode
+        option = document.createElement('option');
+        option.value = countryCode;
+        option.text = `${countryCode} (${countryName})`;
+
+        countryCodeSelect.appendChild(option);
+        console.dir();
     })
     .catch(error => {
         console.error('Wystąpił błąd:', error);
@@ -59,6 +69,14 @@ function getCountryCode(countryName) {
 (() => {
     // nasłuchiwania na zdarzenie kliknięcia myszką
     document.addEventListener('click', handleClick);
-
+    myForm.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (myForm.checkValidity()) {
+                myForm.submit();
+            }
+        }
+    })
     fetchAndFillCountries();
+    getCountryByIP()
 })()
